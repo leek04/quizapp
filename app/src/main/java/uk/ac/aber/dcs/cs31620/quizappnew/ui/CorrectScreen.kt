@@ -12,17 +12,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 @Composable
 fun CorrectScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    questionNum: Int
 ) {
     TopLevelScaffold(
         navController = navController
@@ -34,7 +40,8 @@ fun CorrectScreen(
         ) {
             CorrectScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController
+                navController = navController,
+                questionNum = questionNum
             )
 
         }
@@ -45,7 +52,11 @@ fun CorrectScreen(
 fun CorrectScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
+    questionNum: Int
 ) {
+
+    val context = LocalContext.current
+    val questionsList = loadQuestionsFromFile(context,"questions.json")
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
@@ -57,10 +68,19 @@ fun CorrectScreenContent(
         Spacer(modifier = Modifier.height(50.dp))
 
         FilledTonalButton(
-            onClick = {navController.navigate(Screen.Question.route)},
+            onClick = {navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))},
             modifier = Modifier.wrapContentWidth()
         ) {
             Text(text = "Next Question")
         }
+    }
+}
+
+@Preview
+@Composable
+fun CorrectScreenPreview() {
+    val navController = rememberNavController()
+    QuizAppNewTheme(dynamicColor = false) {
+        CorrectScreen(navController,0)
     }
 }

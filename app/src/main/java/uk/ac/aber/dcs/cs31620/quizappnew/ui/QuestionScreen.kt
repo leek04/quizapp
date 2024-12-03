@@ -96,10 +96,10 @@ fun QuestionScreenContent(
 fun CheckCorrect(navController: NavHostController, questionsList: List<Question>, questionNum: Int) {
     if (choiceIndex.equals(questionsList[questionNum].correctAnswerIndex)) {
         println("CORRECT")
-        navController.navigate(Screen.StartQuiz.route)
+        navController.navigate(Screen.Correct.createRoute(questionNum))
     } else {
         println("INCORRECT")
-        navController.navigate(Screen.StartQuiz.route)
+        navController.navigate(Screen.Incorrect.createRoute(questionNum))
     }
 }
 

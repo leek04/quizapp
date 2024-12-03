@@ -14,14 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.AddQuestionScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.CorrectScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.QuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.RemoveQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.StartQuizScreen
@@ -46,7 +49,6 @@ class MainActivity : ComponentActivity() {
 private fun BuildNavigationGraph() {
     val navController = rememberNavController()
     val context = LocalContext.current
-    val questionNum = 0
 
     NavHost(
         navController = navController,
@@ -55,12 +57,34 @@ private fun BuildNavigationGraph() {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.AddQuestion.route) { AddQuestionScreen(navController) }
         composable(Screen.RemoveQuestion.route) { RemoveQuestionScreen(navController) }
-        composable(Screen.StartQuiz.route) { StartQuizScreen(navController,
-            loadQuestionsFromFile(context,"questions.json")
-        ) }
-        composable(Screen.Question.route) { QuestionScreen(navController,
-            loadQuestionsFromFile(context,"questions.json"),
-        questionNum) }
+        composable(Screen.StartQuiz.route) {
+            StartQuizScreen(
+                navController,
+                loadQuestionsFromFile(context, "questions.json")
+            )
+        }
+        composable(
+            route = Screen.Question.route,
+            arguments = listOf(navArgument("questionNum") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val questionNum = backStackEntry.arguments?.getInt("questionNum") ?: 0
+            QuestionScreen(
+                navController,
+                loadQuestionsFromFile(context, "questions.json"),
+                questionNum
+            )
+        }
+        composable(
+            route = Screen.Correct.route,
+            arguments = listOf(navArgument("questionNum") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val questionNum = backStackEntry.arguments?.getInt("questionNum") ?: 0
+            CorrectScreen(
+                navController,
+                questionNum
+            )
+        }
     }
+
 }
 
