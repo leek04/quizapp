@@ -90,14 +90,6 @@ fun IncorrectScreenContent(
     }
 }
 
-fun checkQuestionList(questionsList: List<Question>, questionNum: Int): Boolean {
-    if (questionsList.size == questionNum) {
-        return true
-    } else {
-        return false
-    }
-}
-
 @Preview
 @Composable
 fun IncorrectScreenPreview() {
