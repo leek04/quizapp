@@ -69,16 +69,24 @@ fun IncorrectScreenContent(
         Spacer(modifier = Modifier.height(50.dp))
 
         Text(
-            text = "The correct answer was: " + questionsList[questionNum].answers[correctAnswerIndex],
+            text = "The correct answer was... ",
             fontSize = 24.sp,
-            textAlign = Center,
+            textAlign = Center
+        )
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        Text(
+            text = (questionsList[questionNum].correctAnswerIndex+1).toString() + " : " + questionsList[questionNum].answers[correctAnswerIndex],
+            fontSize = 24.sp,
+            textAlign = Center
         )
 
         Spacer(modifier = Modifier.height(50.dp))
 
         FilledTonalButton(
             onClick = {if (questionsList.size == questionNum) {
-                /** CHANGE TO FINISH SCREEN WHEN ADDED**/
+                /** TODO **/
                 navController.navigate(Screen.Home.route)
             } else {
                 navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))

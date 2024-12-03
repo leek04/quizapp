@@ -1,16 +1,12 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
@@ -19,16 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 @Composable
-fun CorrectScreen(
-    navController: NavHostController,
-    questionNum: Int
+fun FinishScreen(
+    navController: NavHostController
 ) {
     TopLevelScaffold(
         navController = navController
@@ -38,10 +31,9 @@ fun CorrectScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            CorrectScreenContent(
+            FinishScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController,
-                questionNum = questionNum
+                navController = navController
             )
 
         }
@@ -49,43 +41,40 @@ fun CorrectScreen(
 }
 
 @Composable
-fun CorrectScreenContent(
+fun FinishScreenContent(
     modifier: Modifier = Modifier,
-    navController : NavHostController,
-    questionNum: Int
+    navController : NavHostController
 ) {
+    Spacer(modifier = Modifier.height(8.dp))
+
+
+    /** TODO **/
+    val numPoints: Int = 0
 
     val context = LocalContext.current
     val questionsList = loadQuestionsFromFile(context,"questions.json")
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = "Correct!",
-            fontSize = 24.sp,
-            textAlign = Center,
-        )
+    Text(
+        text = "You Scored...",
+        fontSize = 24.sp,
+        textAlign = Center,
+    )
 
-        Spacer(modifier = Modifier.height(50.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
-        FilledTonalButton(
-            onClick = {if (questionsList.size == questionNum) {
-                /** TODO **/
-                navController.navigate(Screen.Home.route)
-            } else {
-                navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))
-            }},
-            modifier = Modifier.wrapContentWidth()
-        ) {
-            Text(text = "Next Question")
-        }
-    }
+    Text(
+        text = numPoints.toString() + " out of " + questionsList.size,
+        fontSize = 24.sp,
+        textAlign = Center,
+    )
+
 }
 
 @Preview
 @Composable
-fun CorrectScreenPreview() {
+fun FinishScreenPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        CorrectScreen(navController,0)
+        FinishScreen(navController)
     }
 }
