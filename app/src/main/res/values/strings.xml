@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">QuizAppNew</string>
+    <string name="nav_drawer_menu">nav drawer menu</string>
+    <string name="nav_back_button">back button\n</string>
+    <string name="start_quiz_emoji_desc">funny emoji for a more friendly experience</string>
+    <string name="AddQuestion">add question icon</string>
+    <string name="RemoveQuestion">remove question icon thing</string>
+</resources>

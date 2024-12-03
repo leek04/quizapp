@@ -1,0 +1,17 @@
+[
+  {
+    "questionText": "What is 2 + 2?",
+    "answers": ["3", "4", "5"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "questionText": "What is the capital of France?",
+    "answers": ["Berlin", "Madrid", "Paris", "Rome"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "questionText": "What is the capital of France?",
+    "answers": ["Berlin", "Madrid", "Paris", "Rome"],
+    "correctAnswerIndex": 2
+  }
+]
