@@ -21,7 +21,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.AddQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.CorrectScreen
@@ -29,6 +28,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.FinishScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.QuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.RemoveQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.StartQuizScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
