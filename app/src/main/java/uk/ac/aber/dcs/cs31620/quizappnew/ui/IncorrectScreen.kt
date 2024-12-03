@@ -77,11 +77,24 @@ fun IncorrectScreenContent(
         Spacer(modifier = Modifier.height(50.dp))
 
         FilledTonalButton(
-            onClick = {navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))},
+            onClick = {    if (questionsList.size == questionNum) {
+                /** CHANGE TO FINISH SCREEN WHEN ADDED**/
+                navController.navigate(Screen.Home.route)
+            } else {
+                navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))
+            }},
             modifier = Modifier.wrapContentWidth()
         ) {
             Text(text = "Next Question")
         }
+    }
+}
+
+fun checkQuestionList(questionsList: List<Question>, questionNum: Int): Boolean {
+    if (questionsList.size == questionNum) {
+        return true
+    } else {
+        return false
     }
 }
 
