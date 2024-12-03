@@ -1,12 +1,15 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
@@ -17,6 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 @Composable
@@ -54,19 +58,30 @@ fun FinishScreenContent(
     val context = LocalContext.current
     val questionsList = loadQuestionsFromFile(context,"questions.json")
 
-    Text(
-        text = "You Scored...",
-        fontSize = 24.sp,
-        textAlign = Center,
-    )
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-    Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "You Scored...",
+            fontSize = 24.sp,
+            textAlign = Center,
+        )
 
-    Text(
-        text = numPoints.toString() + " out of " + questionsList.size,
-        fontSize = 24.sp,
-        textAlign = Center,
-    )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = numPoints.toString() + " out of " + questionsList.size,
+            fontSize = 24.sp,
+            textAlign = Center,
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        FilledTonalButton(onClick = {
+            navController.navigate(Screen.StartQuiz.route)
+        }) {
+            Text("Home")
+        }
+    }
 
 }
 
