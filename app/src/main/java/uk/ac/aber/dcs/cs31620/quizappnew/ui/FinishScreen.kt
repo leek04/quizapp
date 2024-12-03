@@ -19,15 +19,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 @Composable
 fun FinishScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
-    TopLevelScaffold(
+    QuizScaffold(
         navController = navController
     ) { innerPadding ->
         Surface(

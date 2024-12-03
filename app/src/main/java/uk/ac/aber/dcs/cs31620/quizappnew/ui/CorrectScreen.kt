@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
@@ -30,7 +31,7 @@ fun CorrectScreen(
     navController: NavHostController,
     questionNum: Int
 ) {
-    TopLevelScaffold(
+    QuizScaffold(
         navController = navController
     ) { innerPadding ->
         Surface(
