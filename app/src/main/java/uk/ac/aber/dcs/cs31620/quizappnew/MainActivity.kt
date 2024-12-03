@@ -25,6 +25,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.AddQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.CorrectScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.FinishScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.QuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.RemoveQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.StartQuizScreen
@@ -57,6 +58,7 @@ private fun BuildNavigationGraph() {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.AddQuestion.route) { AddQuestionScreen(navController) }
         composable(Screen.RemoveQuestion.route) { RemoveQuestionScreen(navController) }
+        composable(Screen.Finish.route) { FinishScreen(navController)}
         composable(Screen.StartQuiz.route) {
             StartQuizScreen(
                 navController,

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -27,6 +28,7 @@ sealed class Screen(
     object Incorrect : Screen("incorrect/questionNum",Icons.Filled.Close, "Inorrect") {
         fun createRoute(questionNum: Int) = "incorrect/$questionNum"
     }
+    object Finish : Screen("finish", Icons.Filled.ThumbUp, "Finish")
 }
 
 val screens = listOf(
@@ -36,5 +38,6 @@ val screens = listOf(
     Screen.RemoveQuestion,
     Screen.Question,
     Screen.Correct,
-    Screen.Incorrect
+    Screen.Incorrect,
+    Screen.Finish
 )
