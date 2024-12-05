@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -8,11 +10,16 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
         applicationId = "uk.ac.aber.dcs.cs31620.quizappnew"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -71,4 +78,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }
