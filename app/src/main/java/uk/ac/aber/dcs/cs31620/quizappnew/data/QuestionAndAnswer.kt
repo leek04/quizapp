@@ -13,7 +13,7 @@ data class newQuestion(
 
 @Entity(
     foreignKeys = [ForeignKey(
-        entity = Question::class,
+        entity = newQuestion::class,
         parentColumns = ["id"],
         childColumns = ["questionId"],
         onDelete = ForeignKey.CASCADE

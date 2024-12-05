@@ -10,22 +10,29 @@ import androidx.room.Transaction
 @Dao
 interface QuestionDao {
     @Insert
-    suspend fun insertQuestion(question: Question): Long
+    suspend fun insertQuestion(question: newQuestion): Long
 
     @Insert
     suspend fun insertAnswers(answers: List<Answer>)
 
     @Transaction
     @Query("SELECT * FROM newQuestion")
-    suspend fun getAllQuestionsWithAnswers(): List<QuestionWithAnswers>
     abstract fun getAllQuestions(): List<QuestionWithAnswers>
 }
 
 data class QuestionWithAnswers(
-    @Embedded val question: Question,
+    @Embedded val question: newQuestion,
     @Relation(
         parentColumn = "id",
         entityColumn = "questionId"
     )
     val answers: List<Answer>
 )
+
+fun QuestionWithAnswers.toQuestion(): Question {
+    return Question(
+        questionText = question.questionText,
+        answers = answers.map { it.answerText }, // Convert AnswerEntity to String
+        correctAnswerIndex = question.correctAnswerIndex
+    )
+}
