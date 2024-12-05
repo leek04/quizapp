@@ -17,6 +17,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,7 +32,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
@@ -78,8 +86,18 @@ fun QuestionsList(
     navController : NavHostController
 ) {
 
+    /**
+     * TODO replace all loadquestionsfromfile with loadquestionfromdatabase
+     */
+
     val context = LocalContext.current
-    val questionsList = loadQuestionsFromFile(context,"questions.json")
+    //val questionsList = loadQuestionsFromFile(context,"questions.json")
+    var questionsList by remember { mutableStateOf(emptyList<Question>()) }
+
+    LaunchedEffect(Unit) {
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }
+    }
 
 
     if (questionsList.isNotEmpty()) {
