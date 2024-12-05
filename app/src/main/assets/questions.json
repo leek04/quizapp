@@ -8,10 +8,5 @@
     "questionText": "What is the capital of France?",
     "answers": ["Berlin", "Madrid", "Paris", "Rome"],
     "correctAnswerIndex": 2
-  },
-  {
-    "questionText": "What is the capital of France?",
-    "answers": ["Berlin", "Madrid", "Paris", "Rome"],
-    "correctAnswerIndex": 2
   }
 ]
