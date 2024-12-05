@@ -25,19 +25,8 @@ sealed class Screen(
     object Correct : Screen("correct/questionNum",Icons.Filled.Close, "Correct") {
         fun createRoute(questionNum: Int) = "correct/$questionNum"
     }
-    object Incorrect : Screen("incorrect/questionNum",Icons.Filled.Close, "Inorrect") {
+    object Incorrect : Screen("incorrect/questionNum",Icons.Filled.Close, "Incorrect") {
         fun createRoute(questionNum: Int) = "incorrect/$questionNum"
     }
     object Finish : Screen("finish", Icons.Filled.ThumbUp, "Finish")
 }
-
-val screens = listOf(
-    Screen.Home,
-    Screen.AddQuestion,
-    Screen.StartQuiz,
-    Screen.RemoveQuestion,
-    Screen.Question,
-    Screen.Correct,
-    Screen.Incorrect,
-    Screen.Finish
-)

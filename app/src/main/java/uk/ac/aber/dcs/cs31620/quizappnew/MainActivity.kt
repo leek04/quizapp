@@ -25,6 +25,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.AddQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.CorrectScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.FinishScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.IncorrectScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.QuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.RemoveQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.StartQuizScreen
@@ -67,9 +68,12 @@ private fun BuildNavigationGraph() {
         }
         composable(
             route = Screen.Question.route,
-            arguments = listOf(navArgument("questionNum") { type = NavType.IntType })
+            arguments = listOf(navArgument("questionNum") {
+                //type = NavType.IntType
+                nullable = true
+            })
         ) { backStackEntry ->
-            val questionNum = backStackEntry.arguments?.getInt("questionNum") ?: 0
+            val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             QuestionScreen(
                 navController,
                 loadQuestionsFromFile(context, "questions.json"),
@@ -78,10 +82,26 @@ private fun BuildNavigationGraph() {
         }
         composable(
             route = Screen.Correct.route,
-            arguments = listOf(navArgument("questionNum") { type = NavType.IntType })
+            arguments = listOf(navArgument("questionNum") {
+                //type = NavType.IntType
+                nullable = true
+            })
         ) { backStackEntry ->
-            val questionNum = backStackEntry.arguments?.getInt("questionNum") ?: 0
+            val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             CorrectScreen(
+                navController,
+                questionNum
+            )
+        }
+        composable(
+            route = Screen.Incorrect.route,
+            arguments = listOf(navArgument("questionNum") {
+                //type = NavType.IntType
+                nullable = true
+            })
+        ) { backStackEntry ->
+            val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
+            IncorrectScreen(
                 navController,
                 questionNum
             )

@@ -86,7 +86,7 @@ fun StartQuizScreenContent(
         Spacer(modifier = Modifier.height(50.dp))
 
         FilledTonalButton(
-            onClick = {navController.navigate(Screen.Question.createRoute(questionNum = 0))},
+            onClick = {navController.navigate(Screen.Question.createRoute(0))},
             modifier = Modifier.wrapContentWidth()
         ) {
             Text(text = "Start Quiz!")
