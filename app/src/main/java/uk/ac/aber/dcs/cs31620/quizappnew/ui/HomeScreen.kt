@@ -92,7 +92,7 @@ fun QuestionsList(
 
     val context = LocalContext.current
     //val questionsList = loadQuestionsFromFile(context,"questions.json")
-    var questionsList by remember { mutableStateOf(emptyList<Question>()) }
+    var questionsList = listOf<Question>()
 
     LaunchedEffect(Unit) {
         val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
