@@ -19,13 +19,13 @@ sealed class Screen(
     object AddQuestion : Screen("AddQuestion",Icons.Filled.Create, "Add Question")
     object StartQuiz : Screen("StartQuiz", Icons.Filled.PlayArrow, "Start Quiz!")
     object RemoveQuestion : Screen("RemoveQuestion",Icons.Filled.Delete, "Remove Question")
-    object Question : Screen("question/questionNum",Icons.Filled.Delete, "Question") {
+    object Question : Screen("question/{questionNum}",Icons.Filled.Delete, "Question") {
         fun createRoute(questionNum: Int) = "question/$questionNum"
     }
-    object Correct : Screen("correct/questionNum",Icons.Filled.Close, "Correct") {
+    object Correct : Screen("correct/{questionNum}",Icons.Filled.Close, "Correct") {
         fun createRoute(questionNum: Int) = "correct/$questionNum"
     }
-    object Incorrect : Screen("incorrect/questionNum",Icons.Filled.Close, "Incorrect") {
+    object Incorrect : Screen("incorrect/{questionNum}",Icons.Filled.Close, "Incorrect") {
         fun createRoute(questionNum: Int) = "incorrect/$questionNum"
     }
     object Finish : Screen("finish", Icons.Filled.ThumbUp, "Finish")

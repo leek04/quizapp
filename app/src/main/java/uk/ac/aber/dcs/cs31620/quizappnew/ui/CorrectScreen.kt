@@ -69,7 +69,7 @@ fun CorrectScreenContent(
         Spacer(modifier = Modifier.height(50.dp))
 
         FilledTonalButton(
-            onClick = {if (questionsList.size == questionNum) {
+            onClick = {if (questionNum >= questionsList.size) {
                 navController.navigate(Screen.Finish.route)
             } else {
                 navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))

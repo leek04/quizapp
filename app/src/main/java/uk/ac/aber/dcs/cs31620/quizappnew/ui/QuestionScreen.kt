@@ -79,32 +79,14 @@ fun QuestionScreenContent(
             textAlign = Center,
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        QuestionList(questionsList, questionNum)
-
-        Spacer(modifier = Modifier.height(50.dp))
-
-        FilledTonalButton(onClick = {
-            CheckCorrect(navController,questionsList,questionNum)
-        }) {
-            Text("Submit")
-        }
-    }
-}
-
-fun CheckCorrect(navController: NavHostController, questionsList: List<Question>, questionNum: Int) {
-    if (choiceIndex.equals(questionsList[questionNum].correctAnswerIndex)) {
-        println("CORRECT")
-        navController.navigate(Screen.Correct.createRoute(questionNum))
-    } else {
-        println("INCORRECT")
-        navController.navigate(Screen.Incorrect.createRoute(questionNum))
+        QuestionList(questionsList, questionNum, navController)
     }
 }
 
 @Composable
-fun QuestionList(questionsList: List<Question>, questionNum: Int) {
+fun QuestionList(questionsList: List<Question>, questionNum: Int, navController: NavHostController) {
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
@@ -150,6 +132,37 @@ fun QuestionList(questionsList: List<Question>, questionNum: Int) {
                 }
             }
         }
+        item {
+            Card(
+                modifier = Modifier.padding(10.dp),
+                shape = MaterialTheme.shapes.extraLarge,
+            ) {
+                Row(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .align(alignment = Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    FilledTonalButton(onClick = {
+                        CheckCorrect(navController,questionsList,questionNum)
+                    }) {
+                        Text("Submit")
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+fun CheckCorrect(navController: NavHostController, questionsList: List<Question>, questionNum: Int) {
+    if (choiceIndex.equals(questionsList[questionNum].correctAnswerIndex)) {
+        println("CORRECT")
+        navController.navigate(Screen.Correct.createRoute(questionNum))
+    } else {
+        println("INCORRECT")
+        navController.navigate(Screen.Incorrect.createRoute(questionNum))
     }
 }
 
