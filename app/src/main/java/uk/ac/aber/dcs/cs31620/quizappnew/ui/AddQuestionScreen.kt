@@ -243,6 +243,17 @@ fun SaveQuestionToFile(context: Context, filename: String) {
     val jsonString = gson.toJson(question)
     println(jsonString)
     file.writeText(jsonString)
+}
+
+
+//TODO FINISH THIS
+fun saveQuestionToDatabase(context: Context) {
+     for (i in answers.indices) {
+         if (i.equals("")) {
+             answers.removeAt(i)
+         }
+     }
+
 
 }
 
