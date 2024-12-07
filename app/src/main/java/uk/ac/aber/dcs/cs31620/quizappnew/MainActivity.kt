@@ -76,6 +76,7 @@ private fun BuildNavigationGraph() {
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             QuestionScreen(
                 navController,
+                //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
                 loadQuestionsFromFile(context, "questions.json"),
                 questionNum
             )

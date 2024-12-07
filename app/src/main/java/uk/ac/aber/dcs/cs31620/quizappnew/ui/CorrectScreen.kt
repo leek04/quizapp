@@ -10,6 +10,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,7 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
@@ -57,7 +61,13 @@ fun CorrectScreenContent(
 ) {
 
     val context = LocalContext.current
-    val questionsList = loadQuestionsFromFile(context,"questions.json")
+    //val questionsList = loadQuestionsFromFile(context,"questions.json")
+    var questionsList = listOf<Question>()
+
+    LaunchedEffect(Unit) {
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }
+    }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(

@@ -85,11 +85,6 @@ fun HomeScreen(
 fun QuestionsList(
     navController : NavHostController
 ) {
-
-    /**
-     * TODO replace all loadquestionsfromfile with loadquestionfromdatabase
-     */
-
     val context = LocalContext.current
     //val questionsList = loadQuestionsFromFile(context,"questions.json")
     var questionsList = listOf<Question>()
