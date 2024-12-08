@@ -65,8 +65,13 @@ private fun BuildNavigationGraph() {
             arguments = listOf(navArgument("correct") {
                 nullable = true
             })
-            //TODO FINISH THIS
-        ) {
+
+        ) { backStackEntry ->
+            val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
+            FinishScreen(
+                navController,
+                correct
+            )
         }
 
         composable(Screen.StartQuiz.route) {
@@ -85,7 +90,7 @@ private fun BuildNavigationGraph() {
                 navArgument("correct") {
                     nullable = true
                 }
-                )
+            )
         ) { backStackEntry ->
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
@@ -102,30 +107,42 @@ private fun BuildNavigationGraph() {
             arguments = listOf(navArgument("questionNum") {
                 //type = NavType.IntType
                 nullable = true
-            })
+            },
+                navArgument("correct") {
+                    nullable = true
+                }
+            )
         ) { backStackEntry ->
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
+            val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
             CorrectScreen(
                 navController,
+                //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
                 questionNum,
                 correct
             )
         }
+
         composable(
             route = Screen.Incorrect.route,
             arguments = listOf(navArgument("questionNum") {
                 //type = NavType.IntType
                 nullable = true
-            })
+            },
+                navArgument("correct") {
+                    nullable = true
+                }
+            )
         ) { backStackEntry ->
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
+            val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
             IncorrectScreen(
                 navController,
+                //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
                 questionNum,
                 correct
             )
         }
     }
-
 }
 
