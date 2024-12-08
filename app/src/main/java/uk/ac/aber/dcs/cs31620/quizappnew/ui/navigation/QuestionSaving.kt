@@ -18,9 +18,3 @@ sealed class QuestionSaving(
     object Cancel : QuestionSaving("home", Icons.Filled.Close, "Cancel")
     object Delete : QuestionSaving("home", Icons.Filled.Delete, "Delete")
 }
-
-val saveOptions = listOf(
-    QuestionSaving.Save,
-    QuestionSaving.Cancel,
-    QuestionSaving.Delete
-)
