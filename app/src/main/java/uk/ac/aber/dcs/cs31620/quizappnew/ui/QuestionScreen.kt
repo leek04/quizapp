@@ -44,7 +44,8 @@ var choiceIndex by mutableStateOf(0)
 fun QuestionScreen(
     navController: NavHostController,
     questionsList: List<Question>,
-    questionNum: Int
+    questionNum: Int,
+    correct: Int
 ) {
 
     QuizScaffold(
@@ -57,7 +58,7 @@ fun QuestionScreen(
         ) {
             QuestionScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController, questionsList = questionsList, questionNum
+                navController = navController, questionsList = questionsList, questionNum, correct
             )
 
         }
@@ -69,7 +70,8 @@ fun QuestionScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
     questionsList: List<Question>,
-    questionNum: Int
+    questionNum: Int,
+    correct: Int
 ) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -81,12 +83,12 @@ fun QuestionScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        QuestionList(questionsList, questionNum, navController)
+        QuestionList(questionsList, questionNum, navController, correct)
     }
 }
 
 @Composable
-fun QuestionList(questionsList: List<Question>, questionNum: Int, navController: NavHostController) {
+fun QuestionList(questionsList: List<Question>, questionNum: Int, navController: NavHostController, correct: Int) {
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
@@ -145,7 +147,7 @@ fun QuestionList(questionsList: List<Question>, questionNum: Int, navController:
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     FilledTonalButton(onClick = {
-                        CheckCorrect(navController,questionsList,questionNum)
+                        CheckCorrect(navController,questionsList,questionNum,correct)
                     }) {
                         Text("Submit")
                     }
@@ -156,13 +158,13 @@ fun QuestionList(questionsList: List<Question>, questionNum: Int, navController:
     }
 }
 
-fun CheckCorrect(navController: NavHostController, questionsList: List<Question>, questionNum: Int) {
+fun CheckCorrect(navController: NavHostController, questionsList: List<Question>, questionNum: Int, correct: Int) {
     if (choiceIndex.equals(questionsList[questionNum].correctAnswerIndex)) {
         println("CORRECT")
-        navController.navigate(Screen.Correct.createRoute(questionNum))
+        navController.navigate(Screen.Correct.createRoute(questionNum,correct+1))
     } else {
         println("INCORRECT")
-        navController.navigate(Screen.Incorrect.createRoute(questionNum))
+        navController.navigate(Screen.Incorrect.createRoute(questionNum,correct))
     }
 }
 
@@ -171,6 +173,6 @@ fun CheckCorrect(navController: NavHostController, questionsList: List<Question>
 fun QuestionScreenPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        QuestionScreen(navController, questionsList = listOf<Question>(), 0)
+        QuestionScreen(navController, questionsList = listOf<Question>(), 0,0)
     }
 }

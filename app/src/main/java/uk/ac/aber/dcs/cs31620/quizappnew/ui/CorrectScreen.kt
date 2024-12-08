@@ -33,7 +33,8 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 @Composable
 fun CorrectScreen(
     navController: NavHostController,
-    questionNum: Int
+    questionNum: Int,
+    correct: Int
 ) {
     QuizScaffold(
         navController = navController
@@ -46,7 +47,8 @@ fun CorrectScreen(
             CorrectScreenContent(
                 modifier = Modifier.padding(8.dp),
                 navController = navController,
-                questionNum = questionNum
+                questionNum = questionNum,
+                correct = correct
             )
 
         }
@@ -57,7 +59,8 @@ fun CorrectScreen(
 fun CorrectScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    questionNum: Int
+    questionNum: Int,
+    correct: Int
 ) {
 
     val context = LocalContext.current
@@ -80,9 +83,9 @@ fun CorrectScreenContent(
 
         FilledTonalButton(
             onClick = {if (questionNum >= questionsList.size) {
-                navController.navigate(Screen.Finish.route)
+                navController.navigate(Screen.Finish.createRoute(correct))
             } else {
-                navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1))
+                navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1, correct = correct))
             }},
             modifier = Modifier.wrapContentWidth()
         ) {
@@ -96,6 +99,6 @@ fun CorrectScreenContent(
 fun CorrectScreenPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        CorrectScreen(navController,0)
+        CorrectScreen(navController,0,0)
     }
 }

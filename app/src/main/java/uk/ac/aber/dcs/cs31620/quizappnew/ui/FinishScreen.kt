@@ -32,6 +32,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 @Composable
 fun FinishScreen(
     navController: NavHostController,
+    correct: Int
 ) {
     QuizScaffold(
         navController = navController
@@ -43,7 +44,8 @@ fun FinishScreen(
         ) {
             FinishScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController
+                navController = navController,
+                correct = correct
             )
 
         }
@@ -53,7 +55,8 @@ fun FinishScreen(
 @Composable
 fun FinishScreenContent(
     modifier: Modifier = Modifier,
-    navController : NavHostController
+    navController : NavHostController,
+    correct: Int
 ) {
     Spacer(modifier = Modifier.height(8.dp))
 
@@ -81,7 +84,7 @@ fun FinishScreenContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = numPoints.toString() + " out of " + questionsList.size,
+            text = correct.toString() + " out of " + questionsList.size,
             fontSize = 24.sp,
             textAlign = Center,
         )
@@ -102,6 +105,6 @@ fun FinishScreenContent(
 fun FinishScreenPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        FinishScreen(navController)
+        FinishScreen(navController,0)
     }
 }

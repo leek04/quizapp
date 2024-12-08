@@ -19,14 +19,17 @@ sealed class Screen(
     object AddQuestion : Screen("AddQuestion",Icons.Filled.Create, "Add Question")
     object StartQuiz : Screen("StartQuiz", Icons.Filled.PlayArrow, "Start Quiz!")
     object RemoveQuestion : Screen("RemoveQuestion",Icons.Filled.Delete, "Remove Question")
-    object Question : Screen("question/{questionNum}",Icons.Filled.Delete, "Question") {
-        fun createRoute(questionNum: Int) = "question/$questionNum"
+    object Question : Screen("question/{questionNum}/{correct}",Icons.Filled.Delete, "Question") {
+        fun createRoute(questionNum: Int, correct: Int) = "question/$questionNum/$correct"
     }
-    object Correct : Screen("correct/{questionNum}",Icons.Filled.Close, "Correct") {
-        fun createRoute(questionNum: Int) = "correct/$questionNum"
+    object Correct : Screen("correct/{questionNum}/{correct}",Icons.Filled.Close, "Correct") {
+        fun createRoute(questionNum: Int, correct: Int) = "correct/$questionNum/$correct"
     }
-    object Incorrect : Screen("incorrect/{questionNum}",Icons.Filled.Close, "Incorrect") {
-        fun createRoute(questionNum: Int) = "incorrect/$questionNum"
+    object Incorrect : Screen("incorrect/{questionNum}/{correct}",Icons.Filled.Close, "Incorrect") {
+        fun createRoute(questionNum: Int, correct: Int) = "incorrect/$questionNum/$correct"
     }
-    object Finish : Screen("finish", Icons.Filled.ThumbUp, "Finish")
+
+    object Finish : Screen("incorrect/{correct}",Icons.Filled.ThumbUp, "Finish") {
+        fun createRoute(correct: Int) = "finish/$correct"
+    }
 }
