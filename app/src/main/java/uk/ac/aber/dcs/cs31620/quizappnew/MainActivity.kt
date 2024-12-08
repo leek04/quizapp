@@ -59,26 +59,42 @@ private fun BuildNavigationGraph() {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.AddQuestion.route) { AddQuestionScreen(navController) }
         composable(Screen.RemoveQuestion.route) { RemoveQuestionScreen(navController) }
-        composable(Screen.Finish.route) { FinishScreen(navController)}
+
+        composable(
+            route = Screen.Finish.route,
+            arguments = listOf(navArgument("correct") {
+                nullable = true
+            })
+            //TODO FINISH THIS
+        ) {
+        }
+
         composable(Screen.StartQuiz.route) {
             StartQuizScreen(
                 navController,
                 loadQuestionsFromFile(context, "questions.json")
             )
         }
+
         composable(
             route = Screen.Question.route,
             arguments = listOf(navArgument("questionNum") {
                 //type = NavType.IntType
                 nullable = true
-            })
+            },
+                navArgument("correct") {
+                    nullable = true
+                }
+                )
         ) { backStackEntry ->
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
+            val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
             QuestionScreen(
                 navController,
                 //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
                 loadQuestionsFromFile(context, "questions.json"),
-                questionNum
+                questionNum,
+                correct
             )
         }
         composable(
@@ -91,7 +107,8 @@ private fun BuildNavigationGraph() {
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             CorrectScreen(
                 navController,
-                questionNum
+                questionNum,
+                correct
             )
         }
         composable(
@@ -104,7 +121,8 @@ private fun BuildNavigationGraph() {
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             IncorrectScreen(
                 navController,
-                questionNum
+                questionNum,
+                correct
             )
         }
     }
