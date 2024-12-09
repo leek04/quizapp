@@ -1,6 +1,7 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.Query
@@ -18,7 +19,14 @@ interface QuestionDao {
     @Transaction
     @Query("SELECT * FROM newQuestion")
     abstract fun getAllQuestions(): List<QuestionWithAnswers>
+
+    @Delete
+    suspend fun deleteQuestion(question: newQuestion)
+
+    @Query("DELETE FROM newQuestion WHERE id = :id")
+    suspend fun deleteQuestionById(id: Long)
 }
+
 
 data class QuestionWithAnswers(
     @Embedded val question: newQuestion,

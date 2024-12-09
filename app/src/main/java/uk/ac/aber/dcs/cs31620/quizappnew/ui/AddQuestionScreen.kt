@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,7 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
+import uk.ac.aber.dcs.cs31620.quizappnew.data.Answer
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionDao
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
+import uk.ac.aber.dcs.cs31620.quizappnew.data.newQuestion
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.AddQuestionScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 import java.io.File
@@ -221,40 +228,44 @@ fun QuestionTextField() {
     questionText = text
 }
 
-fun SaveQuestionToFile(context: Context, filename: String) {
-
-    for (i in answers.indices) {
-        if (i.equals("")) {
-            answers.removeAt(i)
-        }
-    }
-
-    val question = Question(
-        questionText = questionText,
-        answers = answers,
-        correctAnswerIndex = correctAnswerIndex
-    )
-
-    println(question.toString())
-
-    val file = File(context.filesDir, filename)
-    val gson = Gson()
-
-    val jsonString = gson.toJson(question)
-    println(jsonString)
-    file.writeText(jsonString)
-}
-
+//fun SaveQuestionToFile(context: Context, filename: String) {
+//
+//    for (i in answers.indices) {
+//        if (i.equals("")) {
+//            answers.removeAt(i)
+//        }
+//    }
+//
+//    val question = Question(
+//        questionText = questionText,
+//        answers = answers,
+//        correctAnswerIndex = correctAnswerIndex
+//    )
+//
+//    println(question.toString())
+//
+//    val file = File(context.filesDir, filename)
+//    val gson = Gson()
+//
+//    val jsonString = gson.toJson(question)
+//    println(jsonString)
+//    file.writeText(jsonString)
+//}
 
 //TODO FINISH THIS
-fun saveQuestionToDatabase(context: Context) {
-     for (i in answers.indices) {
-         if (i.equals("")) {
-             answers.removeAt(i)
-         }
-     }
+suspend fun saveQuestionWithAnswers(dao: QuestionDao) {
+    // Convert the Question to NewQuestion and NewAnswer entities
+    val newQuestion = newQuestion(questionText = questionText, correctAnswerIndex = correctAnswerIndex)
+    val questionId = dao.insertQuestion(newQuestion) // Insert question and get its ID
 
+    val newAnswers = answers.mapIndexed { index, answerText ->
+        Answer(
+            questionId = questionId.toInt(), // Associate answers with the question ID
+            answerText = answerText,
+        )
+    }
 
+    dao.insertAnswers(newAnswers) // Insert all answers
 }
 
 @Preview

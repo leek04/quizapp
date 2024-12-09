@@ -6,13 +6,20 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.SaveQuestionToFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuizDatabase.Companion.getDatabase
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.QuestionSaving
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.saveQuestionWithAnswers
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 @Composable
@@ -59,7 +66,13 @@ fun RowScope.AddItemAddQuestion(
         onClick = {
             if (options.label == "Save") {
 
-                SaveQuestionToFile(context,"questions.json")
+                val database = getDatabase(context)
+                val questionDao = database.questionDao()
+
+                //TODO check if this works, or creates a memory leak
+                GlobalScope.launch {
+                    saveQuestionWithAnswers(questionDao)
+                }
                 navController.navigate(options.route)
                 } else {
                 navController.navigate(options.route)

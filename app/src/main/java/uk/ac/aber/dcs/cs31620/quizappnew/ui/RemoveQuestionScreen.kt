@@ -36,8 +36,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuizDatabase.Companion.getDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
@@ -124,18 +127,17 @@ fun RemoveQuestionList() {
     }
 }
 
+//TODO change to use database
+
 fun deleteQuestion(context: Context) {
-    var questionsList = mutableListOf<Question>()
-    questionsList = loadQuestionsFromFile(context,"questions.json")
 
-    questionsList.removeAt(deleteIndex)
+    val database = getDatabase(context)
+    val questionDao = database.questionDao()
 
-    val file = File(context.filesDir, "questions.json")
-    val gson = Gson()
-
-    val jsonString = gson.toJson(questionsList)
-    println(jsonString)
-    file.writeText(jsonString)
+    //TODO check if this works, or creates a memory leak
+    GlobalScope.launch {
+        questionDao.deleteQuestionById(deleteIndex.toLong())
+    }
 }
 
 @Preview
