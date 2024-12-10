@@ -51,6 +51,15 @@ fun QuestionScreen(
     questionNum: Int,
     correct: Int
 ) {
+    val context = LocalContext.current
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
+
+    LaunchedEffect(Unit) {
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+    }
 
     QuizScaffold(
         navController = navController
@@ -62,7 +71,7 @@ fun QuestionScreen(
         ) {
             QuestionScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController, questionNum, correct
+                navController = navController, questionsList = questionsList, questionNum, correct
             )
 
         }
@@ -73,6 +82,7 @@ fun QuestionScreen(
 fun QuestionScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
+    questionsList: List<Question>,
     questionNum: Int,
     correct: Int
 ) {
@@ -86,26 +96,12 @@ fun QuestionScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        QuestionList(questionNum, navController, correct)
+        QuestionList(questionsList, questionNum, navController, correct)
     }
 }
 
 @Composable
-fun QuestionList(questionNum: Int, navController: NavHostController, correct: Int) {
-
-    val context = LocalContext.current
-    var questionsList by remember {
-        mutableStateOf(mutableListOf<Question>())
-    }
-
-    LaunchedEffect(Unit) {
-        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
-        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
-        println("check here")
-        println("List1 = " + questionsList)
-    }
-
-    println("List2 = " + questionsList)
+fun QuestionList(questionsList: List<Question>, questionNum: Int, navController: NavHostController, correct: Int) {
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
