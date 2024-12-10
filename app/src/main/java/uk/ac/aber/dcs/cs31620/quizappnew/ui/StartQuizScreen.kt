@@ -18,9 +18,15 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
@@ -31,6 +37,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.R
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.AddQuestionTopAppBar
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.MainPageTopAppBar
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
@@ -41,7 +50,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 @Composable
 fun StartQuizScreen(
     navController: NavHostController,
-    questionsList: List<Question>
+    //questionsList: List<Question>
 ) {
 
     QuizScaffold(
@@ -54,7 +63,7 @@ fun StartQuizScreen(
         ) {
                 StartQuizScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController, questionsList = questionsList
+                navController = navController//, questionsList = questionsList
             )
 
         }
@@ -65,8 +74,20 @@ fun StartQuizScreen(
 fun StartQuizScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    questionsList: List<Question>
+    //questionsList: List<Question>
 ) {
+
+
+    val context = LocalContext.current
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
+
+    //TODO may also not work properly, also to do with coroutines
+    LaunchedEffect(Unit) {
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+    }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
@@ -99,6 +120,6 @@ fun StartQuizScreenContent(
 fun StartQuizScreenPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        StartQuizScreen(navController, questionsList = listOf<Question>())
+        StartQuizScreen(navController)
     }
 }

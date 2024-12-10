@@ -87,7 +87,7 @@ private fun BuildNavigationGraph() {
         composable(Screen.StartQuiz.route) {
             StartQuizScreen(
                 navController,
-                loadQuestionsFromFile(context, "questions.json")
+                //loadQuestionsFromFile(context, "questions.json")
             )
         }
 
