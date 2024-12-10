@@ -83,13 +83,24 @@ fun IncorrectScreenContent(
 
     if (!isLoading) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Spacer(modifier = Modifier.height(200.dp))
+
             Text(
                 text = "Incorrect!",
                 fontSize = 24.sp,
                 textAlign = Center,
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(25.dp))
+
+            Text(
+                text = "\uD83D\uDE25",
+                fontSize = 100.sp,
+                textAlign = Center,
+            )
+            
+            Spacer(modifier = Modifier.height(25.dp))
 
             Text(
                 text = "The correct answer was... ",
@@ -97,7 +108,7 @@ fun IncorrectScreenContent(
                 textAlign = Center
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             val correctAnswerNum: Int = questionsList[questionNum].correctAnswerIndex
 
@@ -107,7 +118,7 @@ fun IncorrectScreenContent(
                 textAlign = Center
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             FilledTonalButton(
                 onClick = {

@@ -81,25 +81,47 @@ fun CorrectScreenContent(
         isLoading = false
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = "Correct!",
-            fontSize = 24.sp,
-            textAlign = Center,
-        )
+    if (!isLoading) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(200.dp))
 
-        FilledTonalButton(
-            onClick = {if (questionNum >= questionsList.size-1) {
-                navController.navigate(Screen.Finish.createRoute(correct))
-            } else {
-                navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1, correct = correct))
-            }},
-            modifier = Modifier.wrapContentWidth()
-        ) {
-            Text(text = "Next Question")
+            Text(
+                text = "Correct!",
+                fontSize = 24.sp,
+                textAlign = Center,
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            Text(
+                text = "\uD83E\uDD29",
+                fontSize = 100.sp,
+                textAlign = Center,
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            FilledTonalButton(
+                onClick = {
+                    if (questionNum >= questionsList.size - 1) {
+                        navController.navigate(Screen.Finish.createRoute(correct))
+                    } else {
+                        navController.navigate(
+                            Screen.Question.createRoute(
+                                questionNum = questionNum + 1,
+                                correct = correct
+                            )
+                        )
+                    }
+                },
+                modifier = Modifier.wrapContentWidth()
+            ) {
+                Text(text = "Next Question")
+            }
         }
+    } else {
+        Text("Loading")
     }
 }
 

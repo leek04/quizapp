@@ -75,13 +75,16 @@ fun StartQuizScreenContent(
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Spacer(modifier = Modifier.height(200.dp))
+
         Text(
             text = "Ready to Start?",
             fontSize = 24.sp,
             textAlign = Center,
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
         Text(
             text = "There will be " + questionsList.size + " Questions",
@@ -89,7 +92,15 @@ fun StartQuizScreenContent(
             textAlign = Center,
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(25.dp))
+
+        Text(
+            text = "\uD83E\uDDD0",
+            fontSize = 100.sp,
+            textAlign = Center,
+        )
+
+        Spacer(modifier = Modifier.height(25.dp))
 
         FilledTonalButton(
             onClick = {navController.navigate(Screen.Question.createRoute(0,0))},

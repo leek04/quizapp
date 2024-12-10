@@ -75,31 +75,45 @@ fun FinishScreenContent(
         questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
         isLoading = false
     }
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(
-            text = "You Scored...",
-            fontSize = 24.sp,
-            textAlign = Center,
-        )
+    if (!isLoading) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(200.dp))
 
-        Text(
-            text = correct.toString() + " out of " + questionsList.size,
-            fontSize = 24.sp,
-            textAlign = Center,
-        )
+            Text(
+                text = "You Scored...",
+                fontSize = 24.sp,
+                textAlign = Center,
+            )
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
-        FilledTonalButton(onClick = {
-            navController.navigate(Screen.Home.route)
-        }) {
-            Text("Home")
+            Text(
+                text = correct.toString() + " out of " + questionsList.size,
+                fontSize = 24.sp,
+                textAlign = Center,
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            Text(
+                text = "\uD83E\uDD73",
+                fontSize = 100.sp,
+                textAlign = Center,
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            FilledTonalButton(onClick = {
+                navController.navigate(Screen.Home.route)
+            }) {
+                Text("Home")
+            }
         }
+    } else {
+        Text("loading")
     }
-
 }
 
 @Preview
