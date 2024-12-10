@@ -1,5 +1,6 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,13 +38,12 @@ import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
-import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
-var choiceIndex by mutableStateOf(-1)
+var choiceIndex by mutableIntStateOf(-1)
 
 @Composable
 fun QuestionScreen(
@@ -94,6 +94,7 @@ fun QuestionScreenContent(
     }
 }
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun QuestionList( questionNum: Int, navController: NavHostController, correct: Int) {
 
@@ -184,7 +185,7 @@ fun QuestionList( questionNum: Int, navController: NavHostController, correct: I
 }
 
 fun CheckCorrect(navController: NavHostController, questionsList: List<Question>, questionNum: Int, correct: Int) {
-    if (choiceIndex.equals(questionsList[questionNum].correctAnswerIndex)) {
+    if (choiceIndex == questionsList[questionNum].correctAnswerIndex) {
         println("CORRECT")
         navController.navigate(Screen.Correct.createRoute(questionNum,correct+1))
     } else {

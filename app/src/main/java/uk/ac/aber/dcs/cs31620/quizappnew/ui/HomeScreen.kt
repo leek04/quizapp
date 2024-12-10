@@ -1,6 +1,5 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -34,7 +33,6 @@ import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
-import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
@@ -118,7 +116,7 @@ fun QuestionsList(
                     }
                 }
             }
-            item() {
+            item {
                 Card(
                     modifier = Modifier.padding(10.dp),
                     shape = MaterialTheme.shapes.extraLarge,

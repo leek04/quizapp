@@ -1,5 +1,6 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,14 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.currentCoroutineContext
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
-import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
 import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
@@ -60,6 +58,7 @@ fun IncorrectScreen(
     }
 }
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun IncorrectScreenContent(
     modifier: Modifier = Modifier,
@@ -112,8 +111,6 @@ fun IncorrectScreenContent(
 
             FilledTonalButton(
                 onClick = {
-                    println("questionNum = " + questionNum)
-                    println("lsit size = " + questionsList.size)
                     if (questionNum >= questionsList.size-1) {
                         navController.navigate(Screen.Finish.createRoute(correct))
                     } else {

@@ -15,21 +15,21 @@ sealed class Screen(
     val route: String, val icon: ImageVector, val label: String
 ) {
 
-    object Home : Screen("home", Icons.Filled.Home, "Home")
-    object AddQuestion : Screen("AddQuestion",Icons.Filled.Create, "Add Question")
-    object StartQuiz : Screen("StartQuiz", Icons.Filled.PlayArrow, "Start Quiz!")
-    object RemoveQuestion : Screen("RemoveQuestion",Icons.Filled.Delete, "Remove Question")
-    object Question : Screen("question/{questionNum}/{correct}",Icons.Filled.Delete, "Question") {
+    data object Home : Screen("home", Icons.Filled.Home, "Home")
+    data object AddQuestion : Screen("AddQuestion",Icons.Filled.Create, "Add Question")
+    data object StartQuiz : Screen("StartQuiz", Icons.Filled.PlayArrow, "Start Quiz!")
+    data object RemoveQuestion : Screen("RemoveQuestion",Icons.Filled.Delete, "Remove Question")
+    data object Question : Screen("question/{questionNum}/{correct}",Icons.Filled.Delete, "Question") {
         fun createRoute(questionNum: Int, correct: Int) = "question/$questionNum/$correct"
     }
-    object Correct : Screen("correct/{questionNum}/{correct}",Icons.Filled.Close, "Correct") {
+    data object Correct : Screen("correct/{questionNum}/{correct}",Icons.Filled.Close, "Correct") {
         fun createRoute(questionNum: Int, correct: Int) = "correct/$questionNum/$correct"
     }
-    object Incorrect : Screen("incorrect/{questionNum}/{correct}",Icons.Filled.Close, "Incorrect") {
+    data object Incorrect : Screen("incorrect/{questionNum}/{correct}",Icons.Filled.Close, "Incorrect") {
         fun createRoute(questionNum: Int, correct: Int) = "incorrect/$questionNum/$correct"
     }
 
-    object Finish : Screen("incorrect/{correct}",Icons.Filled.ThumbUp, "Finish") {
+    data object Finish : Screen("incorrect/{correct}",Icons.Filled.ThumbUp, "Finish") {
         fun createRoute(correct: Int) = "finish/$correct"
     }
 }

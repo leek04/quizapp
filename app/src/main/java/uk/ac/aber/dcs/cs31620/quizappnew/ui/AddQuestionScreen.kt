@@ -1,7 +1,5 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui
 
-import android.content.Context
-import android.widget.RadioGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,37 +22,28 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.gson.Gson
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Answer
-import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionDao
-import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
-import uk.ac.aber.dcs.cs31620.quizappnew.data.QuizDatabase
-import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.newQuestion
-import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.AddQuestionScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
-import java.io.File
 
 var questionText: String = ""
-val answers = mutableListOf<String>("","","","","","","","","","")
+val answers = mutableListOf("","","","","","","","","","")
 
-var correctAnswerIndex by mutableStateOf(0)
+var correctAnswerIndex by mutableIntStateOf(0)
 
 @Composable
 fun AddQuestionScreen(
@@ -92,7 +81,7 @@ fun AddQuestionScreenContent(
 fun AddQuestionList() {
 
     var answerListNum by remember {
-        mutableStateOf(1)
+        mutableIntStateOf(1)
 
     }
         LazyColumn(
@@ -150,7 +139,7 @@ fun AddQuestionList() {
                     RadioButton(
                         selected = correctAnswerIndex == index,
                         onClick = { correctAnswerIndex = index
-                        println("index = " + index)}
+                        println("index = $index")}
                     )
                 }
             }
@@ -260,7 +249,7 @@ suspend fun saveQuestionWithAnswers(dao: QuestionDao) {
 
     answers.removeAll{it.isEmpty()}
 
-    val newAnswers = answers.mapIndexed { index, answerText ->
+    val newAnswers = answers.mapIndexed { _, answerText ->
         Answer(
             questionId = questionId.toInt(), // Associate answers with the question ID
             answerText = answerText,
