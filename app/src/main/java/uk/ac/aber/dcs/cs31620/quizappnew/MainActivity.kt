@@ -27,11 +27,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            //applying app theme
             QuizAppNewTheme(dynamicColor = false) {
+                //main surface container setup
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //building navigation graph
                     BuildNavigationGraph()
                 }
             }
@@ -41,21 +44,26 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun BuildNavigationGraph() {
+    //navcontroller manages navigation
     val navController = rememberNavController()
 
+    //sets up navcontroller with start destination, which is home screen
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route
     ) {
+        //defines destinations that the navcontroller can go to
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.AddQuestion.route) { AddQuestionScreen(navController) }
         composable(Screen.RemoveQuestion.route) { RemoveQuestionScreen(navController) }
         composable(Screen.StartQuiz.route) { StartQuizScreen(navController) }
 
         composable(
+            //route includes the question number and how many points the user has got correct so far
             route = Screen.Question.route,
             arguments = listOf(navArgument("questionNum") {
                 //type = NavType.IntType
+                //defines as nullable because it was crashing otherwise
                 nullable = true
                 },
                 navArgument("correct") {
@@ -63,16 +71,19 @@ private fun BuildNavigationGraph() {
                 }
             )
         ) { backStackEntry ->
+            //retrieving arguments from backstackentry
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
 
             QuestionScreen(
+                //all arguments passed to the question display
                 navController,
                 questionNum,
                 correct
             )
         }
 
+        //basically the same as the question screen
         composable(
             route = Screen.Correct.route,
             arguments = listOf(navArgument("questionNum") {
@@ -114,6 +125,7 @@ private fun BuildNavigationGraph() {
         }
 
         composable(
+            //i have no idea why the route needed to be different here, but it would crash otherwise
             route = "finish/{correct}",
             arguments = listOf(navArgument("correct") {
                 nullable = true
@@ -122,6 +134,7 @@ private fun BuildNavigationGraph() {
             val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
             FinishScreen(
                 navController,
+                //does not need questionNum, unlike the others
                 correct
             )
         }

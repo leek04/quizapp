@@ -42,14 +42,17 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 fun HomeScreen(
     navController: NavHostController
 ) {
+    //uses custom scaffold component for ui structure
     TopLevelScaffold(
         navController = navController
+        //padding to avoid overlapping content
     ) { innerPadding ->
         Surface(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
+            //after rendering scaffold, it then renders the rest of the home page
             HomeScreenContent(
                 modifier = Modifier.padding(8.dp),
                 navController = navController
@@ -64,6 +67,7 @@ fun HomeScreen(
         modifier: Modifier = Modifier,
         navController : NavHostController
     ) {
+        //spaces out the text so it looks cleaner
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
@@ -83,22 +87,31 @@ fun HomeScreen(
 fun QuestionsList(
     navController : NavHostController
 ) {
+
     val context = LocalContext.current
+    //remembers the state of the questionslist while being mapped
     var questionsList by remember {
         mutableStateOf(mutableListOf<Question>())
     }
 
+    //starts a coroutine that loads questions from the database
     LaunchedEffect(Unit) {
         val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        //maps the loaded questions onto the Question class.
+        // i chose to do it this way because the Question class was being used a lot before i added the database
+        //and i didnt want to go back and redo all the work i had done
         questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
     }
 
+    //checks if there are actually questions to show
     if (questionsList.isNotEmpty()) {
+        //displays the questions in a dynamic list, that changes length depending on how many questions there are
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            //each question is displayed as a card
             items(questionsList.count()) { question ->
                 Card(
                     modifier = Modifier.padding(10.dp),
@@ -116,6 +129,7 @@ fun QuestionsList(
                     }
                 }
             }
+            //then a button to start the quiz is at the bottom of the list
             item {
                 Card(
                     modifier = Modifier.padding(10.dp),
@@ -138,6 +152,7 @@ fun QuestionsList(
             }
         }
     }
+    //if there are no questions
     else {
 
         Text(
@@ -149,6 +164,7 @@ fun QuestionsList(
     }
 }
 
+//displays what the page will look like in the ide
 @Preview
 @Composable
 fun HomeScreenPreview() {
