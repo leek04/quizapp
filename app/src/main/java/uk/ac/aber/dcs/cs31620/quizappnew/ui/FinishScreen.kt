@@ -10,6 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -60,19 +64,19 @@ fun FinishScreenContent(
 ) {
     Spacer(modifier = Modifier.height(8.dp))
 
-
-    /** TODO **/
-    val numPoints: Int = 0
-
     val context = LocalContext.current
-    //val questionsList = loadQuestionsFromFile(context,"questions.json")
-    var questionsList = listOf<Question>()
+    var isLoading by remember { mutableStateOf(true) }
 
-    LaunchedEffect(Unit) {
-        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
-        questionsList = questionsWithAnswers.map { it.toQuestion() }
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
     }
 
+    LaunchedEffect(Unit) {
+        isLoading = true
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+        isLoading = false
+    }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text(
@@ -92,7 +96,7 @@ fun FinishScreenContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         FilledTonalButton(onClick = {
-            navController.navigate(Screen.StartQuiz.route)
+            navController.navigate(Screen.Home.route)
         }) {
             Text("Home")
         }

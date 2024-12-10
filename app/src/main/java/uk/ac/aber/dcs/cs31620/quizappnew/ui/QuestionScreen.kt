@@ -43,7 +43,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
-var choiceIndex by mutableStateOf(0)
+var choiceIndex by mutableStateOf(-1)
 
 @Composable
 fun QuestionScreen(
@@ -53,15 +53,7 @@ fun QuestionScreen(
 ) {
 
     //TODO this doesnt actually save the questionslist for some reason, maybe something to do with the coroutine
-    val context = LocalContext.current
-    var questionsList by remember {
-        mutableStateOf(mutableListOf<Question>())
-    }
 
-    LaunchedEffect(Unit) {
-        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
-        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
-    }
 
     QuizScaffold(
         navController = navController
@@ -73,7 +65,7 @@ fun QuestionScreen(
         ) {
             QuestionScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController, questionsList = questionsList, questionNum, correct
+                navController = navController, questionNum, correct
             )
 
         }
@@ -84,7 +76,7 @@ fun QuestionScreen(
 fun QuestionScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    questionsList: List<Question>,
+    //questionsList: List<Question>,
     questionNum: Int,
     correct: Int
 ) {
@@ -98,78 +90,96 @@ fun QuestionScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        QuestionList(questionsList, questionNum, navController, correct)
+        QuestionList( questionNum, navController, correct)
     }
 }
 
 @Composable
-fun QuestionList(questionsList: List<Question>, questionNum: Int, navController: NavHostController, correct: Int) {
+fun QuestionList( questionNum: Int, navController: NavHostController, correct: Int) {
 
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(25.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        item {
-            Card(
-                modifier = Modifier.padding(10.dp),
-                shape = MaterialTheme.shapes.medium,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(vertical = 25.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(questionsList[questionNum].questionText)
-                }
-            }
-        }
-        itemsIndexed(questionsList[questionNum].answers) { index, _ ->
-            Card(
-                modifier = Modifier.padding(10.dp),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(vertical = 25.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = questionsList[questionNum].answers[index])
+    val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(true) }
 
-                    RadioButton(
-                        selected = choiceIndex == index,
-                        onClick = { choiceIndex = index }
-                    )
-                }
-            }
-        }
-        item {
-            Card(
-                modifier = Modifier.padding(10.dp),
-                shape = MaterialTheme.shapes.extraLarge,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .align(alignment = Alignment.CenterHorizontally),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+        isLoading = false
+    }
+
+    if (!isLoading) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(25.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Card(
+                    modifier = Modifier.padding(10.dp),
+                    shape = MaterialTheme.shapes.medium,
                 ) {
-                    FilledTonalButton(onClick = {
-                        CheckCorrect(navController,questionsList,questionNum,correct)
-                    }) {
-                        Text("Submit")
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(vertical = 25.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(questionsList[questionNum].questionText)
                     }
+                }
+            }
+            itemsIndexed(questionsList[questionNum].answers) { index, _ ->
+                Card(
+                    modifier = Modifier.padding(10.dp),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(vertical = 25.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = questionsList[questionNum].answers[index])
 
+                        RadioButton(
+                            selected = choiceIndex == index,
+                            onClick = { choiceIndex = index }
+                        )
+                    }
+                }
+            }
+            item {
+                Card(
+                    modifier = Modifier.padding(10.dp),
+                    shape = MaterialTheme.shapes.extraLarge,
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .align(alignment = Alignment.CenterHorizontally),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        FilledTonalButton(onClick = {
+                            CheckCorrect(navController, questionsList, questionNum, correct)
+                        }) {
+                            Text("Submit")
+                        }
+
+                    }
                 }
             }
         }
+    } else {
+        Text("loading")
     }
 }
 

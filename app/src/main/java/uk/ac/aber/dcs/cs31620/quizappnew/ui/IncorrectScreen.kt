@@ -10,6 +10,11 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,7 +26,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.currentCoroutineContext
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.TopLevelScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
@@ -61,45 +69,69 @@ fun IncorrectScreenContent(
 ) {
 
     val context = LocalContext.current
-    val questionsList = loadQuestionsFromFile(context,"questions.json")
+    var isLoading by remember { mutableStateOf(true) }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = "Incorrect!",
-            fontSize = 24.sp,
-            textAlign = Center,
-        )
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
 
-        Spacer(modifier = Modifier.height(50.dp))
+    LaunchedEffect(Unit) {
+        isLoading = true
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+        isLoading = false
+    }
 
-        Text(
-            text = "The correct answer was... ",
-            fontSize = 24.sp,
-            textAlign = Center
-        )
+    if (!isLoading) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Incorrect!",
+                fontSize = 24.sp,
+                textAlign = Center,
+            )
 
-        Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
-        val correctAnswerNum: Int = questionsList[questionNum].correctAnswerIndex
+            Text(
+                text = "The correct answer was... ",
+                fontSize = 24.sp,
+                textAlign = Center
+            )
 
-        Text(
-            text = (correctAnswerNum+1).toString() + " : " + questionsList[questionNum].answers[correctAnswerNum],
-            fontSize = 24.sp,
-            textAlign = Center
-        )
+            Spacer(modifier = Modifier.height(50.dp))
 
-        Spacer(modifier = Modifier.height(50.dp))
+            val correctAnswerNum: Int = questionsList[questionNum].correctAnswerIndex
 
-        FilledTonalButton(
-            onClick = {if (questionNum >= questionsList.size) {
-                navController.navigate(Screen.Finish.createRoute(correct))
-            } else {
-                navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1, correct = correct))
-            }},
-            modifier = Modifier.wrapContentWidth()
-        ) {
-            Text(text = "Next Question")
+            Text(
+                text = (correctAnswerNum + 1).toString() + " : " + questionsList[questionNum].answers[correctAnswerNum],
+                fontSize = 24.sp,
+                textAlign = Center
+            )
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            FilledTonalButton(
+                onClick = {
+                    println("questionNum = " + questionNum)
+                    println("lsit size = " + questionsList.size)
+                    if (questionNum >= questionsList.size-1) {
+                        navController.navigate(Screen.Finish.createRoute(correct))
+                    } else {
+                        navController.navigate(
+                            Screen.Question.createRoute(
+                                questionNum = questionNum + 1,
+                                correct = correct
+                            )
+                        )
+                    }
+                },
+                modifier = Modifier.wrapContentWidth()
+            ) {
+                Text(text = "Next Question")
+            }
         }
+    } else {
+        Text("loading")
     }
 }
 

@@ -77,13 +77,11 @@ fun StartQuizScreenContent(
     //questionsList: List<Question>
 ) {
 
-
     val context = LocalContext.current
     var questionsList by remember {
         mutableStateOf(mutableListOf<Question>())
     }
 
-    //TODO may also not work properly, also to do with coroutines
     LaunchedEffect(Unit) {
         val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
         questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()

@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuizDatabase.Companion.getDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.newQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.AddQuestionScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.AddQuestionTopAppBar
@@ -52,7 +54,9 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 import java.io.File
 
-var deleteIndex by mutableIntStateOf(0)
+var deleteIndex by mutableIntStateOf(-1)
+var questionToDelete: newQuestion = newQuestion(0,"",0)
+
 
 @Composable
 fun RemoveQuestionScreen(
@@ -90,54 +94,60 @@ fun RemoveQuestionScreenContent(
 fun RemoveQuestionList() {
 
     val context = LocalContext.current
-    //val questionsList = loadQuestionsFromFile(context,"questions.json")
-    var questionsList = listOf<Question>()
+    var questionsList: List<QuestionWithAnswers> by remember { mutableStateOf(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
 
-    LaunchedEffect(Unit) {
-        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
-        questionsList = questionsWithAnswers.map { it.toQuestion() }
+    LaunchedEffect(Unit) { // Trigger only once when the composable is recomposed
+        isLoading = true
+        questionsList = loadQuestionsFromDatabase(context)
+        isLoading = false
     }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(25.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        itemsIndexed(questionsList) { index, _ ->
-            Card(
-                modifier = Modifier.padding(10.dp),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(vertical = 25.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+    if (!isLoading) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(25.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            itemsIndexed(questionsList) { index, _ ->
+                Card(
+                    modifier = Modifier.padding(10.dp),
+                    shape = MaterialTheme.shapes.medium
                 ) {
-                    Text(text = questionsList[index].questionText)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(vertical = 25.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = questionsList[index].question.questionText)
 
-                    RadioButton(
-                        selected = deleteIndex == index,
-                        onClick = { deleteIndex = index }
-                    )
+                        RadioButton(
+                            selected = deleteIndex == index,
+                            onClick = {
+                                deleteIndex = index
+                                questionToDelete = questionsList[index].question
+                            }
+                        )
+                    }
                 }
             }
         }
     }
+    else {
+        Text("loading")
+    }
 }
-
-//TODO change to use database
 
 fun deleteQuestion(context: Context) {
 
     val database = getDatabase(context)
     val questionDao = database.questionDao()
 
-    //TODO check if this works, or creates a memory leak
     GlobalScope.launch {
-        questionDao.deleteQuestionById(deleteIndex.toLong())
+        questionDao.deleteQuestion(questionToDelete)
     }
 }
 

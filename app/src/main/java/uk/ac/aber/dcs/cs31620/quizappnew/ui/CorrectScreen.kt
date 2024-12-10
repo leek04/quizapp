@@ -11,6 +11,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -64,12 +68,17 @@ fun CorrectScreenContent(
 ) {
 
     val context = LocalContext.current
-    //val questionsList = loadQuestionsFromFile(context,"questions.json")
-    var questionsList = listOf<Question>()
+    var isLoading by remember { mutableStateOf(true) }
+
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
 
     LaunchedEffect(Unit) {
+        isLoading = true
         val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
-        questionsList = questionsWithAnswers.map { it.toQuestion() }
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+        isLoading = false
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -82,7 +91,7 @@ fun CorrectScreenContent(
         Spacer(modifier = Modifier.height(50.dp))
 
         FilledTonalButton(
-            onClick = {if (questionNum >= questionsList.size) {
+            onClick = {if (questionNum >= questionsList.size-1) {
                 navController.navigate(Screen.Finish.createRoute(correct))
             } else {
                 navController.navigate(Screen.Question.createRoute(questionNum = questionNum+1, correct = correct))

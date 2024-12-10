@@ -24,7 +24,8 @@ interface QuestionDao {
     suspend fun deleteQuestion(question: newQuestion)
 
     @Query("DELETE FROM newQuestion WHERE id = :id")
-    suspend fun deleteQuestionById(id: Long)
+    suspend fun deleteQuestionById(id: Int)
+
 }
 
 
