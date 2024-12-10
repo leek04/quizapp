@@ -43,6 +43,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.data.Answer
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionDao
 import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuizDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.newQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
@@ -264,6 +265,8 @@ suspend fun saveQuestionWithAnswers(dao: QuestionDao) {
             answerText = answerText,
         )
     }
+
+    println(dao.getAllQuestions())
 
     dao.insertAnswers(newAnswers) // Insert all answers
 }

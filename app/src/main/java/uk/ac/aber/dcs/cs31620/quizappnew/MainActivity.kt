@@ -11,15 +11,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.AddQuestionScreen
@@ -94,10 +104,9 @@ private fun BuildNavigationGraph() {
         ) { backStackEntry ->
             val questionNum = backStackEntry.arguments?.getString("questionNum")?.toInt() ?: 0
             val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
+
             QuestionScreen(
                 navController,
-                //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
-                loadQuestionsFromFile(context, "questions.json"),
                 questionNum,
                 correct
             )
@@ -117,7 +126,6 @@ private fun BuildNavigationGraph() {
             val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
             CorrectScreen(
                 navController,
-                //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
                 questionNum,
                 correct
             )
@@ -138,7 +146,6 @@ private fun BuildNavigationGraph() {
             val correct = backStackEntry.arguments?.getString("correct")?.toInt() ?: 0
             IncorrectScreen(
                 navController,
-                //TODO CHANGE TO LOADQUESTIONSFROMDATABASE
                 questionNum,
                 correct
             )

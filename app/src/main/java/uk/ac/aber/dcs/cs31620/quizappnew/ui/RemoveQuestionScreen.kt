@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,7 +52,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 import java.io.File
 
-var deleteIndex by mutableStateOf(0)
+var deleteIndex by mutableIntStateOf(0)
 
 @Composable
 fun RemoveQuestionScreen(

@@ -86,14 +86,14 @@ fun QuestionsList(
     navController : NavHostController
 ) {
     val context = LocalContext.current
-    //val questionsList = loadQuestionsFromFile(context,"questions.json")
-    var questionsList = listOf<Question>()
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
 
     LaunchedEffect(Unit) {
         val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
-        questionsList = questionsWithAnswers.map { it.toQuestion() }
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
     }
-
 
     if (questionsList.isNotEmpty()) {
         LazyColumn(

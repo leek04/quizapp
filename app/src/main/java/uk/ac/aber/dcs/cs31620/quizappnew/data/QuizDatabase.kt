@@ -18,7 +18,7 @@ abstract class QuizDatabase : RoomDatabase() {
                     context.applicationContext,
                     QuizDatabase::class.java,
                     "quiz_database"
-                ).build()
+                ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 instance
             }

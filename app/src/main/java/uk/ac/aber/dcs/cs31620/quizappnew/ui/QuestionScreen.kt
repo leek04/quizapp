@@ -20,8 +20,10 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +35,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import uk.ac.aber.dcs.cs31620.quizappnew.data.Question
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuestionWithAnswers
+import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromDatabase
 import uk.ac.aber.dcs.cs31620.quizappnew.data.loadQuestionsFromFile
+import uk.ac.aber.dcs.cs31620.quizappnew.data.toQuestion
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.QuizScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
@@ -43,7 +48,6 @@ var choiceIndex by mutableStateOf(0)
 @Composable
 fun QuestionScreen(
     navController: NavHostController,
-    questionsList: List<Question>,
     questionNum: Int,
     correct: Int
 ) {
@@ -58,7 +62,7 @@ fun QuestionScreen(
         ) {
             QuestionScreenContent(
                 modifier = Modifier.padding(8.dp),
-                navController = navController, questionsList = questionsList, questionNum, correct
+                navController = navController, questionNum, correct
             )
 
         }
@@ -69,7 +73,6 @@ fun QuestionScreen(
 fun QuestionScreenContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    questionsList: List<Question>,
     questionNum: Int,
     correct: Int
 ) {
@@ -83,12 +86,26 @@ fun QuestionScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        QuestionList(questionsList, questionNum, navController, correct)
+        QuestionList(questionNum, navController, correct)
     }
 }
 
 @Composable
-fun QuestionList(questionsList: List<Question>, questionNum: Int, navController: NavHostController, correct: Int) {
+fun QuestionList(questionNum: Int, navController: NavHostController, correct: Int) {
+
+    val context = LocalContext.current
+    var questionsList by remember {
+        mutableStateOf(mutableListOf<Question>())
+    }
+
+    LaunchedEffect(Unit) {
+        val questionsWithAnswers: List<QuestionWithAnswers> = loadQuestionsFromDatabase(context)
+        questionsList = questionsWithAnswers.map { it.toQuestion() }.toMutableList()
+        println("check here")
+        println("List1 = " + questionsList)
+    }
+
+    println("List2 = " + questionsList)
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
@@ -173,6 +190,6 @@ fun CheckCorrect(navController: NavHostController, questionsList: List<Question>
 fun QuestionScreenPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        QuestionScreen(navController, questionsList = listOf<Question>(), 0,0)
+        QuestionScreen(navController, 0,0)
     }
 }
