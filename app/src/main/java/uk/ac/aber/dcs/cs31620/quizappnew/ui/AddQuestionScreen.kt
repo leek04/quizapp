@@ -253,11 +253,12 @@ fun QuestionTextField() {
 //    file.writeText(jsonString)
 //}
 
-//TODO FINISH THIS
 suspend fun saveQuestionWithAnswers(dao: QuestionDao) {
     // Convert the Question to NewQuestion and NewAnswer entities
     val newQuestion = newQuestion(questionText = questionText, correctAnswerIndex = correctAnswerIndex)
     val questionId = dao.insertQuestion(newQuestion) // Insert question and get its ID
+
+    answers.removeAll{it.isEmpty()}
 
     val newAnswers = answers.mapIndexed { index, answerText ->
         Answer(
