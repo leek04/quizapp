@@ -99,7 +99,7 @@ fun AddQuestionList() {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Demo_ExposedDropdownMenuBox(selectedValue = answerListNum, onValueChange = {newValue -> answerListNum = newValue})
+                    DropdownMenuBox(selectedValue = answerListNum, onValueChange = {newValue -> answerListNum = newValue})
                 }
             }
         }
@@ -149,7 +149,7 @@ fun AddQuestionList() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Demo_ExposedDropdownMenuBox(selectedValue: Int, onValueChange : (Int) -> Unit) {
+fun DropdownMenuBox(selectedValue: Int, onValueChange : (Int) -> Unit) {
     val nums = arrayOf(1,2,3,4,5,6,7,8,9,10)
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(nums[0].toString()) }
