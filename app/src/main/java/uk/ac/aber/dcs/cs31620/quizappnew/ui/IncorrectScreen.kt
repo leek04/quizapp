@@ -113,7 +113,7 @@ fun IncorrectScreenContent(
             val correctAnswerNum: Int = questionsList[questionNum].correctAnswerIndex
 
             Text(
-                text = (correctAnswerNum + 1).toString() + " : " + questionsList[questionNum].answers[correctAnswerNum],
+                text ="Answer " + (correctAnswerNum + 1).toString() + " : " + questionsList[questionNum].answers[correctAnswerNum],
                 fontSize = 24.sp,
                 textAlign = Center
             )

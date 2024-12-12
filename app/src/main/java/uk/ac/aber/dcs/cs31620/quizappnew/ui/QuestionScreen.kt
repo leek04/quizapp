@@ -52,9 +52,6 @@ fun QuestionScreen(
     correct: Int
 ) {
 
-    //TODO this doesnt actually save the questionslist for some reason, maybe something to do with the coroutine
-
-
     QuizScaffold(
         navController = navController
     ) { innerPadding ->
