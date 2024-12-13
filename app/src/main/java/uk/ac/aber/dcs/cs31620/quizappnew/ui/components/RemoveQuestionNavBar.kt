@@ -1,6 +1,7 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui.components
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -47,7 +48,7 @@ fun RowScope.AddItemRemoveQuestion(
         },
 
         // The icon resource
-        icon = {options.icon},
+        icon = { Icon(imageVector = options.icon, contentDescription = null) },
 
         // Display if the icon it is select or not
         selected = true,

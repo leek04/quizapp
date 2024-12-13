@@ -1,6 +1,7 @@
 package uk.ac.aber.dcs.cs31620.quizappnew.ui.components
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -40,12 +41,11 @@ fun RowScope.AddItem(
         label = {
             Text(text = screen.label)
         },
+        // Display if the icon it is select or not
+        selected = false,
 
         // The icon resource
-        icon = {screen.icon},
-
-        // Display if the icon it is select or not
-        selected = true,
+        icon = { Icon(imageVector = screen.selectedIcon, contentDescription = null)},
 
         // Always show the label bellow the icon or not
         alwaysShowLabel = true,
