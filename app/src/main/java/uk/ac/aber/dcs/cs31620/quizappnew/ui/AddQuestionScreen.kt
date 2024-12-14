@@ -102,8 +102,8 @@ fun AddQuestionList() {
                     DropdownMenuBox(selectedValue = answerListNum, onValueChange = {
                         newValue -> answerListNum = newValue
                         //removes answers that go past selected number
-                        for (x in 1..(10 - answerListNum)) {
-                            answers.removeLast()
+                        for (i in answers.size - (10 - answerListNum) until answers.size) {
+                            answers[i] = "" // Replace the element with an empty string
                         }
                     })
                 }
