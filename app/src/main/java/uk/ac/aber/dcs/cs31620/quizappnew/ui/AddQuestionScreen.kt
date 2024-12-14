@@ -99,7 +99,13 @@ fun AddQuestionList() {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DropdownMenuBox(selectedValue = answerListNum, onValueChange = {newValue -> answerListNum = newValue})
+                    DropdownMenuBox(selectedValue = answerListNum, onValueChange = {
+                        newValue -> answerListNum = newValue
+                        //removes answers that go past selected number
+                        for (x in 1..(10 - answerListNum)) {
+                            answers.removeLast()
+                        }
+                    })
                 }
             }
         }
