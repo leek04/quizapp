@@ -41,7 +41,7 @@ import uk.ac.aber.dcs.cs31620.quizappnew.ui.components.AddQuestionScaffold
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 var questionText: String = ""
-val answers = mutableListOf("","","","","","","","","","")
+var answers = mutableListOf("","","","","","","","","","")
 
 var correctAnswerIndex by mutableIntStateOf(0)
 
@@ -247,6 +247,8 @@ suspend fun saveQuestionWithAnswers(dao: QuestionDao) {
     val newQuestion = newQuestion(questionText = questionText, correctAnswerIndex = correctAnswerIndex)
     val questionId = dao.insertQuestion(newQuestion) // Insert question and get its ID
 
+
+
     answers.removeAll{it.isEmpty()}
 
     val newAnswers = answers.mapIndexed { _, answerText ->
@@ -259,6 +261,11 @@ suspend fun saveQuestionWithAnswers(dao: QuestionDao) {
     println(dao.getAllQuestions())
 
     dao.insertAnswers(newAnswers) // Insert all answers
+
+    //re declare answer defaults
+    answers = mutableListOf("","","","","","","","","","")
+    correctAnswerIndex = 0
+    questionText = ""
 }
 
 @Preview

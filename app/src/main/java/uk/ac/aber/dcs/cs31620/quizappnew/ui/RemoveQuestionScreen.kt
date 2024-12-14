@@ -129,11 +129,20 @@ fun RemoveQuestionList() {
 
 fun deleteQuestion(context: Context) {
 
+
+    //gets questionDao for modifying database
     val database = getDatabase(context)
     val questionDao = database.questionDao()
 
     GlobalScope.launch {
+        //MAKE SURE ANSWER IS DELETED
+        questionDao.deleteAnswerByquestionId(questionToDelete.id)
+
+        // then delete question
         questionDao.deleteQuestion(questionToDelete)
+
+        deleteIndex = -1
+        questionToDelete = newQuestion(0,"",0)
     }
 }
 

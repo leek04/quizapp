@@ -26,6 +26,20 @@ interface QuestionDao {
     @Query("DELETE FROM newQuestion WHERE id = :id")
     suspend fun deleteQuestionById(id: Int)
 
+    @Query("DELETE FROM Answer WHERE questionId = :id")
+    suspend fun deleteAnswerByquestionId(id: Int)
+
+    @Query("DELETE FROM Answer WHERE Id = :id")
+    suspend fun deleteAnswerById(id: Int)
+
+    @Transaction
+    @Query("SELECT * FROM Answer WHERE questionId = :id")
+    abstract fun getAnswerByQuestionId(id: Int): List<Answer>
+
+    @Transaction
+    @Query("SELECT * FROM Answer WHERE Id = :id")
+    abstract fun getAnswerById(id: Int):Answer
+
 }
 
 

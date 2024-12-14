@@ -7,26 +7,29 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import uk.ac.aber.dcs.cs31620.quizappnew.data.QuizDatabase.Companion.getDatabase
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.EditQuestion
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.QuestionSaving
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 @Composable
-fun MainPageNavBar(navController: NavHostController) {
+fun EditQuestionNavBar(navController: NavHostController) {
 
     val items = listOf(
-        Screen.AddQuestion,
-        Screen.RemoveQuestion,
-        //edit question is unfinished, do not include
-        Screen.EditQuestion
+        QuestionSaving.Save,
+        QuestionSaving.Cancel
     )
 
     NavigationBar {
         items.forEach { item ->
-            AddItem(
-                screen = item,
+            AddItemAddQuestion2(
+                options = item,
                 navController = navController
             )
         }
@@ -34,38 +37,52 @@ fun MainPageNavBar(navController: NavHostController) {
 }
 
 @Composable
-fun RowScope.AddItem(
-    screen: Screen,
+fun RowScope.AddItemAddQuestion2(
+    options: QuestionSaving,
     navController: NavHostController
 ) {
+    val context = LocalContext.current
+
     NavigationBarItem(
         // Text that shows bellow the icon
         label = {
-            Text(text = screen.label)
+            Text(text = options.label)
         },
-        // Display if the icon it is select or not
-        selected = true,
 
         // The icon resource
-        icon = { Icon(imageVector = screen.selectedIcon, contentDescription = null)},
+        icon = { Icon(imageVector = options.icon, contentDescription = null) },
+
+        // Display if the icon it is select or not
+        selected = true,
 
         // Always show the label bellow the icon or not
         alwaysShowLabel = true,
 
         // Click listener for the icon
-        onClick = {navController.navigate(screen.route)},
+        onClick = {
+            if (options.label == "Save") {
+
+                val database = getDatabase(context)
+                val questionDao = database.questionDao()
+
+                GlobalScope.launch {
+                    EditQuestion(context)
+                }
+                navController.navigate(options.route)
+            } else {
+                navController.navigate(options.route)
+            } },
 
         // Control all the colors of the icon
         colors = NavigationBarItemDefaults.colors()
     )
 }
 
-
 @Preview
 @Composable
-private fun MainPageNavigationBarPreview() {
+private fun AddQuestionNavigationBarPreview() {
     val navController = rememberNavController()
     QuizAppNewTheme(dynamicColor = false) {
-        MainPageNavBar(navController)
+        AddQuestionNavBar(navController)
     }
 }

@@ -185,9 +185,11 @@ fun CheckCorrect(navController: NavHostController, questionsList: List<Question>
     if (choiceIndex == questionsList[questionNum].correctAnswerIndex) {
         println("CORRECT")
         navController.navigate(Screen.Correct.createRoute(questionNum,correct+1))
+        choiceIndex = -1
     } else {
         println("INCORRECT")
         navController.navigate(Screen.Incorrect.createRoute(questionNum,correct))
+        choiceIndex = -1
     }
 }
 

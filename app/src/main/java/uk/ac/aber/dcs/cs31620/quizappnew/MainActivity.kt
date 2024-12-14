@@ -12,15 +12,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
-import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.AddQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.CorrectScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.EditQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.FinishScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.HomeScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.IncorrectScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.QuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.RemoveQuestionScreen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.StartQuizScreen
+import uk.ac.aber.dcs.cs31620.quizappnew.ui.navigation.Screen
 import uk.ac.aber.dcs.cs31620.quizappnew.ui.theme.QuizAppNewTheme
 
 class MainActivity : ComponentActivity() {
@@ -56,6 +57,8 @@ private fun BuildNavigationGraph() {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.AddQuestion.route) { AddQuestionScreen(navController) }
         composable(Screen.RemoveQuestion.route) { RemoveQuestionScreen(navController) }
+        //edit question screen is unfinished, is included in navgraph, but cannot be reached as it is not included in any navbar
+        composable(Screen.EditQuestion.route) { EditQuestionScreen(navController) }
         composable(Screen.StartQuiz.route) { StartQuizScreen(navController) }
 
         composable(
